@@ -1090,7 +1090,7 @@ function G:SetupActionBar(parent)
 
 	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
-	scroll.child:SetHeight(640) -- fit the per-bar fade controls
+	scroll.child:SetHeight(700) -- fit the growth direction row and the per-bar fade controls
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
@@ -1106,6 +1106,7 @@ function G:SetupActionBar(parent)
 		["BarPet"] = {26, 1, 10, 10, 10},
 	}
 	local directions = {L["GO_UP"], L["GO_DOWN"], L["GO_LEFT"], L["GO_RIGHT"]}
+	local growDirections = {L["DOWN_RIGHT"], L["DOWN_LEFT"], L["UP_RIGHT"], L["UP_LEFT"]}
 	local function toggleBar(self)
 		C.db["Actionbar"][self.__value] = self:GetChecked()
 		Bar:UpdateVisibility()
@@ -1140,9 +1141,10 @@ function G:SetupActionBar(parent)
 		if value ~= "BarPet" then
 			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
 			createOptionDropdown(parent, L["FlyoutDirection"], offset-410, directions, L["FlyoutDirectionTip"], "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
+			createOptionDropdown(parent, L["BarGrowthDirection"], offset-480, growDirections, L["BarGrowthDirectionTip"], "Actionbar", value.."Grow", 1, updateBarScale)
 		end
 
-		local fadeOffset = value == "BarPet" and offset-340 or offset-480
+		local fadeOffset = value == "BarPet" and offset-340 or offset-550
 		createOptionCheck(parent, fadeOffset, L["FadeWhenNotHovered"], "Actionbar", value.."Fade", updateFade, L["FadeWhenNotHoveredTip"])
 		createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, fadeOffset-70, value.."FadeAlpha", updateFade, "Actionbar")
 	end
